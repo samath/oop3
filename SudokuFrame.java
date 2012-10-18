@@ -7,18 +7,121 @@ import java.awt.event.*;
 
 
  public class SudokuFrame extends JFrame {
+	 
+	 protected JTextArea input;
+	 protected JTextArea output;
+	 protected JButton solve;
+	 protected JCheckBox autoCheck;
+	 protected JComboBox gridChoices;
+	 protected JButton load;
+	 
+	 private static final int EMPTY = 0;
+	 private static final int EASY = 1;
+	 private static final int MEDIUM = 2;
+	 private static final int HARD = 3;
 	
 	public SudokuFrame() {
 		super("Sudoku Solver");
 		
-		// YOUR CODE HERE
+		JPanel panel = createPanel();
+		add(panel);
 		
-		// Could do this:
-		// setLocationByPlatform(true);
+		addListeners();
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		pack();
 		setVisible(true);
+	}
+	
+	private JPanel createPanel() {
+		JPanel panel = new JPanel();
+		panel.setLayout(new BorderLayout(4,4));
+		
+		input = new JTextArea(15, 20);
+		input.setBorder(new TitledBorder("Puzzle"));
+		output = new JTextArea(15, 20);
+		output.setBorder(new TitledBorder("Solution"));
+		output.setEditable(false);
+		
+		solve = new JButton("Check");
+		autoCheck = new JCheckBox("Auto Check");
+		autoCheck.setSelected(true);
+		gridChoices = new JComboBox(new String[] {"none", "easy", "medium", "hard"});
+		load = new JButton("Load Grid");
+		
+		JPanel row = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		row.add(solve);
+		row.add(autoCheck);
+		row.add(load);
+		row.add(gridChoices);
+		
+		
+		panel.add(input, BorderLayout.WEST);
+		panel.add(output, BorderLayout.EAST);
+		panel.add(row, BorderLayout.SOUTH);
+		
+		return panel;
+	}
+	
+	private void addListeners() {
+		input.getDocument().addDocumentListener(new DocumentListener() {
+			public void changedUpdate(DocumentEvent e) {
+				if(autoCheck.isSelected()) check();
+			}
+			public void insertUpdate(DocumentEvent arg0) {
+				if(autoCheck.isSelected()) check();
+			}
+			public void removeUpdate(DocumentEvent arg0) {
+				if(autoCheck.isSelected()) check();
+			}
+		});
+		solve.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent arg0) {
+				check();
+			}
+		});
+		load.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent arg0) {
+				switch(gridChoices.getSelectedIndex()) {
+				case EASY:
+					input.setText(Sudoku.gridToText(Sudoku.easyGrid));
+					break;
+				case MEDIUM:
+					input.setText(Sudoku.gridToText(Sudoku.mediumGrid));
+					break;
+				case HARD:
+					input.setText(Sudoku.gridToText(Sudoku.hardGrid));
+					break;
+				default:
+					//empty
+				}
+			}
+		});
+	}
+	
+	private void check(){
+		String text = input.getText();
+		Sudoku s;
+		try{
+			s = new Sudoku(Sudoku.textToGrid(text));
+		} catch(RuntimeException e) {
+			output.setText("Parsing error.");
+			return;
+		}
+		if(!s.validate()) {
+			output.setText("Invalid grid.");
+			return;
+		}
+		int numSolutions = s.solve();
+		String solved = s.getSolutionText();
+		long elapsed = s.getElapsed();
+		
+		StringBuilder sb = new StringBuilder();
+		sb.append(solved + "\n");
+		sb.append("solutions: " + numSolutions + "\n");
+		sb.append("elapsed: " + elapsed);
+		
+		output.setText(sb.toString());
 	}
 	
 	

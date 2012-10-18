@@ -1,3 +1,4 @@
+import java.text.ParseException;
 import java.util.*;
 
 /*
@@ -130,6 +131,35 @@ public class Sudoku {
 		return System.currentTimeMillis() - startTime;
 	}
 	
+	public boolean validate() {
+		for(int i = 0; i < SIZE; i++) {
+			for(int j = 0; j < SIZE; j++) {
+				int num = grid[i][j];
+				if(num != 0) {
+					for(int k = i + 1; k < SIZE; k++) {
+						if(num == grid[k][j]) {
+							return false;
+						}
+					}
+					for(int l = j + 1; l < SIZE; l++) {
+						if(num == grid[i][l]) {
+							return false;
+						}
+					}
+					for(int k = 0; k < PART; k++) {
+						for(int l = 0; l < PART; l++) {
+							int x = PART * (i / PART) + k, y = PART * (j / PART) + l;
+							if(!(x == i && y == j) && num == grid[x][y]) {
+								return false;
+							}
+						}
+					}
+				}
+			}
+		}
+		return true;
+	}
+	
 	// Provided easy 1 6 grid
 	// (can paste this text into the GUI too)
 	public static final int[][] easyGrid = Sudoku.stringsToGrid(
@@ -169,6 +199,17 @@ public class Sudoku {
 	"0 0 0 5 3 0 9 0 0",
 	"0 3 0 0 0 0 0 5 1");
 	
+	//Unsolvable -- top left corner has no choices	
+	public static final int[][] unsolvableGrid = Sudoku.stringsToGrid(
+	"0 1 2 3 0 0 0 0 0",
+	"4 5 6 0 0 0 0 0 0",
+	"7 8 9 0 0 0 0 0 0",
+	"0 0 0 0 0 0 0 0 0",
+	"0 0 0 0 0 0 0 0 0",
+	"0 0 0 0 0 0 0 0 0",
+	"0 0 0 0 0 0 0 0 0",
+	"0 0 0 0 0 0 0 0 0",
+	"0 0 0 0 0 0 0 0 0");
 	
 	public static final int SIZE = 9;  // size of the whole 9x9 puzzle
 	public static final int PART = 3;  // size of each 3x3 part

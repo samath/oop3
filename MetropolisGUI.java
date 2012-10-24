@@ -1,14 +1,10 @@
 import javax.swing.*;
-import javax.swing.table.AbstractTableModel;
-
-import com.mysql.jdbc.ResultSetImpl;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.*;
 
 
 public class MetropolisGUI extends JFrame {

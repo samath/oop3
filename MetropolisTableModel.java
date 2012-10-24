@@ -271,14 +271,12 @@ public class MetropolisTableModel extends AbstractTableModel {
 		
 		public enum PopulationSearchOptions { 
 			EQUAL(0), LARGER(1), SMALLER(2);
-			@SuppressWarnings("unused")
 			private int index;
 			private PopulationSearchOptions(int i) { index = i; }
 			public int index() { return index; }
 		}
 		public enum MatchSearchOptions {
 			EXACT(0), PARTIAL(1);
-			@SuppressWarnings("unused")
 			private int index;
 			private MatchSearchOptions(int i) { index = i; }
 			public int index() { return index; }

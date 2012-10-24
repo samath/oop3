@@ -6,8 +6,6 @@ import java.sql.Statement;
 
 import javax.swing.table.AbstractTableModel;
 
-import com.mysql.jdbc.ResultSetImpl;
-
 public class MetropolisTableModel extends AbstractTableModel {
 		private static final long serialVersionUID = 1L;
 		
@@ -49,6 +47,7 @@ public class MetropolisTableModel extends AbstractTableModel {
 		 *  should create and display by default.
 		 *  @return the number of columns in the model
 		 */
+		@Override
 		public int getColumnCount() { 
 			return COLUMNS.length;
 		}
@@ -69,7 +68,9 @@ public class MetropolisTableModel extends AbstractTableModel {
 		 * This method should be quick, as it is called frequently during rendering.
 		 * @return the number of rows in the model
 		 */
+		@Override
 		public int getRowCount() {
+			if(rs == null) return 0;
 			try {
 				rs.last();
 				return rs.getRow();
@@ -84,7 +85,9 @@ public class MetropolisTableModel extends AbstractTableModel {
 		 * @param columnIndex the column whose value is to be queried
 		 * @return the value Object at the given cell
 		 */
+		@Override
 		public Object getValueAt(int rowIndex, int columnIndex) {
+			if(rs == null) return "";
 			try{
 				rs.first();
 				while(rs.getRow() < rowIndex + 1) { 
@@ -262,11 +265,11 @@ public class MetropolisTableModel extends AbstractTableModel {
 		}
 		
 		/**
-		 * Empty Table Model by replacing local ResultSet with new empty set.
+		 * Empty Table Model by replacing local ResultSet with a null value.
 		 * Used for initialization and handling malformed queries.
 		 */
 		private void emptyResultSet() {
-			rs = new ResultSetImpl(0, 0, null, null);
+			rs = null;
 		}
 		
 		public enum PopulationSearchOptions { 

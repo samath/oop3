@@ -19,8 +19,8 @@ public class MetropolisGUI extends JFrame {
 	
 	private JButton addButton;
 	private JButton searchButton;
-	private JComboBox<String> populationDrop;
-	private JComboBox<String> matchDrop;
+	private JComboBox populationDrop;
+	private JComboBox matchDrop;
 		
 	
 	public MetropolisGUI() {
@@ -74,8 +74,8 @@ public class MetropolisGUI extends JFrame {
 
 		addButton = new JButton("Add");
 		searchButton = new JButton("Search");
-		populationDrop = new JComboBox<String>(POPULATION_OPTIONS);
-		matchDrop = new JComboBox<String>(MATCH_OPTIONS);
+		populationDrop = new JComboBox(POPULATION_OPTIONS);
+		matchDrop = new JComboBox(MATCH_OPTIONS);
 		
 		addButton.setAlignmentX(Component.LEFT_ALIGNMENT);
 		addButton.setAlignmentY(Component.TOP_ALIGNMENT);
@@ -119,6 +119,7 @@ public class MetropolisGUI extends JFrame {
 	
 	private void addListeners() {
 		addButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				model.add(metropolisBox.getText(),
 					   	  continentBox.getText(),
@@ -126,6 +127,7 @@ public class MetropolisGUI extends JFrame {
 			}
 		});
 		searchButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				model.search(metropolisBox.getText(),
 							 continentBox.getText(),

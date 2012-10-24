@@ -14,7 +14,7 @@ import java.awt.event.*;
 	 protected JTextArea output;
 	 protected JButton solve;
 	 protected JCheckBox autoCheck;
-	 protected JComboBox<String> gridChoices;
+	 protected JComboBox gridChoices;
 	 protected JButton load;
 	 
 	 private static final int EMPTY = 0;
@@ -48,7 +48,7 @@ import java.awt.event.*;
 		solve = new JButton("Check");
 		autoCheck = new JCheckBox("Auto Check");
 		autoCheck.setSelected(true);
-		gridChoices = new JComboBox<String>(new String[] {"none", "easy", "medium", "hard"});
+		gridChoices = new JComboBox(new String[] {"none", "easy", "medium", "hard"});
 		load = new JButton("Load Grid");
 		
 		JPanel row = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -67,22 +67,27 @@ import java.awt.event.*;
 	
 	private void addListeners() {
 		input.getDocument().addDocumentListener(new DocumentListener() {
+			@Override
 			public void changedUpdate(DocumentEvent e) {
 				if(autoCheck.isSelected()) check();
 			}
+			@Override
 			public void insertUpdate(DocumentEvent arg0) {
 				if(autoCheck.isSelected()) check();
 			}
+			@Override
 			public void removeUpdate(DocumentEvent arg0) {
 				if(autoCheck.isSelected()) check();
 			}
 		});
 		solve.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				check();
 			}
 		});
 		load.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				switch(gridChoices.getSelectedIndex()) {
 				case EMPTY:
@@ -103,6 +108,7 @@ import java.awt.event.*;
 			}
 		});
 		autoCheck.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				if(autoCheck.isSelected()) check();
 			}

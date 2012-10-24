@@ -144,6 +144,7 @@ public class Sudoku {
 		}
 		
 		Collections.sort(list, new Comparator<Spot>() {
+			@Override
 			public int compare(Spot s1, Spot s2) {
 				return s1.getValidNumbers().size() - s2.getValidNumbers().size();
 			}

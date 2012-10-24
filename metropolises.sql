@@ -1,4 +1,4 @@
-USE c_cs108_psyoung;
+USE c_cs108_samath;
 
 DROP TABLE IF EXISTS metropolises;
  -- remove table if it already exists and start from scratch

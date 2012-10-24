@@ -7,12 +7,14 @@ import java.awt.event.*;
 
 
  public class SudokuFrame extends JFrame {
+
+	 private static final long serialVersionUID = 1L;
 	 
 	 protected JTextArea input;
 	 protected JTextArea output;
 	 protected JButton solve;
 	 protected JCheckBox autoCheck;
-	 protected JComboBox gridChoices;
+	 protected JComboBox<String> gridChoices;
 	 protected JButton load;
 	 
 	 private static final int EMPTY = 0;
@@ -46,7 +48,7 @@ import java.awt.event.*;
 		solve = new JButton("Check");
 		autoCheck = new JCheckBox("Auto Check");
 		autoCheck.setSelected(true);
-		gridChoices = new JComboBox(new String[] {"none", "easy", "medium", "hard"});
+		gridChoices = new JComboBox<String>(new String[] {"none", "easy", "medium", "hard"});
 		load = new JButton("Load Grid");
 		
 		JPanel row = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -75,14 +77,17 @@ import java.awt.event.*;
 				if(autoCheck.isSelected()) check();
 			}
 		});
-		solve.addActionListener(new ActionListener(){
+		solve.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				check();
 			}
 		});
-		load.addActionListener(new ActionListener(){
+		load.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				switch(gridChoices.getSelectedIndex()) {
+				case EMPTY:
+					input.setText("");
+					break;
 				case EASY:
 					input.setText(Sudoku.gridToText(Sudoku.easyGrid));
 					break;
@@ -95,6 +100,11 @@ import java.awt.event.*;
 				default:
 					//empty
 				}
+			}
+		});
+		autoCheck.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if(autoCheck.isSelected()) check();
 			}
 		});
 	}
@@ -119,7 +129,7 @@ import java.awt.event.*;
 		StringBuilder sb = new StringBuilder();
 		sb.append(solved + "\n");
 		sb.append("solutions: " + numSolutions + "\n");
-		sb.append("elapsed: " + elapsed);
+		sb.append("elapsed: " + elapsed + "ms");
 		
 		output.setText(sb.toString());
 	}
@@ -132,8 +142,9 @@ import java.awt.event.*;
 		// to ignore the exception.
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		} catch (Exception ignored) { }
+		} catch (Exception ignored) {/* empty */ }
 		
+		@SuppressWarnings("unused")
 		SudokuFrame frame = new SudokuFrame();
 	}
 

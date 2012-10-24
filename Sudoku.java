@@ -1,4 +1,3 @@
-import java.text.ParseException;
 import java.util.*;
 
 /*
@@ -9,11 +8,13 @@ public class Sudoku {
 	// Provided grid data for main/testing
 	// The instance variable strategy is up to you.
 	
-	private int[][] grid;
+	private final int[][] grid;
 	private int count = 0;
 	private boolean solved = false;
-	private String solution = "";
 	private long startTime;
+	
+	private String solution = "";
+	private String original;
 	
 	private class Spot {
 		private int x, y;
@@ -57,13 +58,29 @@ public class Sudoku {
 	// solving hardGrid.
 	public static void main(String[] args) {
 		Sudoku sudoku;
-		sudoku = new Sudoku(hardGrid);
-		
+		sudoku = new Sudoku(hardGrid);	
 		System.out.println(sudoku); // print the raw problem
+		
 		int count = sudoku.solve();
 		System.out.println("solutions:" + count);
 		System.out.println("elapsed:" + sudoku.getElapsed() + "ms");
 		System.out.println(sudoku.getSolutionText());
+	}
+	
+	@Override
+	public String toString() {
+		return original;
+	}
+	
+	public static String gridToText(int[][] g) {
+		StringBuilder sb = new StringBuilder();
+		for(int i = 0; i < g.length; i++) {
+			for(int j = 0; j < g[0].length; j++) {
+				sb.append(g[i][j] + " ");
+			}
+			if(i < SIZE - 1) sb.append("\n");
+		}
+		return sb.toString();
 	}
 	
 	
@@ -75,6 +92,7 @@ public class Sudoku {
 	public Sudoku(int[][] ints) {
 		grid = deepCopy(ints);
 		startTime = System.currentTimeMillis();
+		original = gridToText(grid);
 	}
 	
 	
@@ -90,6 +108,12 @@ public class Sudoku {
 		return count; // YOUR CODE HERE
 	}
 	
+	/**
+	 * Recursive helper function for solve.
+	 * Assumes that every spot in spots before index is non-zero, 
+	 * everything after is 0.
+	 * Iterates over options in getValidNumbers() and follows recursively.
+	 */
 	private void trySpot(List<Spot> spots, int index, int length) {
 		if(count >= MAX_SOLUTIONS) return;
 		if(index == length) {
@@ -105,6 +129,12 @@ public class Sudoku {
 		s.set(0);
 	}
 	
+	/**
+	 * Iterates over all the cells in the grid and selects those with 0
+	 * by calling the Spot constructor.
+	 * Uses the Comparator class and the Collections sort function to sort
+	 * the list based on which cell has the fewest options.
+	 */
 	private List<Spot> sortedBlankCells() {
 		List<Spot> list = new ArrayList<Spot>();
 		for(int i = 0; i < SIZE; i++) {
@@ -131,6 +161,10 @@ public class Sudoku {
 		return System.currentTimeMillis() - startTime;
 	}
 	
+	
+	/**
+	 * Check if the grid is in a valid starting state.
+	 */
 	public boolean validate() {
 		for(int i = 0; i < SIZE; i++) {
 			for(int j = 0; j < SIZE; j++) {
@@ -232,17 +266,6 @@ public class Sudoku {
 			result[row] = stringToInts(rows[row]);
 		}
 		return result;
-	}
-	
-	public static String gridToText(int[][] g) {
-		StringBuilder sb = new StringBuilder();
-		for(int i = 0; i < SIZE; i++) {
-			for(int j = 0; j < SIZE; j++) {
-				sb.append(g[i][j] + " ");
-			}
-			sb.append("\n");
-		}
-		return sb.toString();
 	}
 	
 	
